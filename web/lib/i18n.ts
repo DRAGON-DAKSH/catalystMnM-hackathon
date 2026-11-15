@@ -44,6 +44,15 @@ const en = {
   allDone: "All done for today",
   schedule: "Today's schedule",
   addFirst: "Add the first medicine below to get started",
+  n_due: "Time to take {med} ({time})",
+  n_nudge: "Please take {med}. It was due at {time}",
+  n_missed: "{elder} has not taken {med} (due {time})",
+  n_missed_critical: "Urgent: {elder} missed {med}, a critical medicine (due {time})",
+  bell: "Notifications",
+  noNotifs: "No notifications yet",
+  voiceOn: "Voice alerts are on",
+  voiceOff: "Turn on voice alerts",
+  runNow: "Run reminders now",
 } as const;
 
 export type Key = keyof typeof en;
@@ -88,6 +97,15 @@ const dict: Record<Lang, Record<Key, string>> = {
     allDone: "आज की सारी दवाइयाँ हो गईं",
     schedule: "आज की दवाओं की सूची",
     addFirst: "शुरू करने के लिए नीचे पहली दवा जोड़ें",
+    n_due: "{med} लेने का समय हो गया है ({time})",
+    n_nudge: "कृपया {med} लें। इसका समय {time} था",
+    n_missed: "{elder} ने {med} नहीं ली (समय {time})",
+    n_missed_critical: "ज़रूरी: {elder} की ज़रूरी दवा {med} छूट गई (समय {time})",
+    bell: "सूचनाएँ",
+    noNotifs: "अभी कोई सूचना नहीं",
+    voiceOn: "आवाज़ वाली सूचनाएँ चालू हैं",
+    voiceOff: "आवाज़ वाली सूचनाएँ चालू करें",
+    runNow: "अभी रिमाइंडर चलाएँ",
   },
   mr: {
     tagline: "आपल्या माणसांची काळजी, एकत्र मिळून",
@@ -127,7 +145,27 @@ const dict: Record<Lang, Record<Key, string>> = {
     allDone: "आजची सर्व औषधे झाली",
     schedule: "आजचे वेळापत्रक",
     addFirst: "सुरू करण्यासाठी खाली पहिले औषध जोडा",
+    n_due: "{med} घेण्याची वेळ झाली ({time})",
+    n_nudge: "कृपया {med} घ्या. त्याची वेळ {time} होती",
+    n_missed: "{elder} यांनी {med} घेतले नाही (वेळ {time})",
+    n_missed_critical: "तातडीचे: {elder} यांचे महत्त्वाचे औषध {med} चुकले (वेळ {time})",
+    bell: "सूचना",
+    noNotifs: "अजून कोणत्याही सूचना नाहीत",
+    voiceOn: "आवाजी सूचना सुरू आहेत",
+    voiceOff: "आवाजी सूचना सुरू करा",
+    runNow: "आता स्मरणपत्रे चालवा",
   },
 };
 
 export const t = (lang: Lang, key: Key) => dict[lang][key] ?? en[key];
+
+export function tf(
+  lang: Lang,
+  key: Key,
+  params: Record<string, string> = {}
+): string {
+  return t(lang, key).replace(
+    /\{(\w+)\}/g,
+    (_match, name: string) => params[name] ?? ""
+  );
+}

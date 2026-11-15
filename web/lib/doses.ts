@@ -2,19 +2,17 @@ import "server-only";
 import { db } from "./supabase";
 import { istDate, slot } from "./time";
 
-/** Creates today's pending dose rows for every active medication (safe to call repeatedly). */
-export async function ensureTodayDoses(circleId: string) {
+/** Creates today's pending dose rows (safe to call repeatedly). Pass no id to cover every circle. */
+export async function ensureTodayDoses(circleId?: string) {
   const date = istDate();
-  const { data: meds } = await db
-    .from("medications")
-    .select("id, times")
-    .eq("circle_id", circleId)
-    .eq("active", true);
+  let q = db.from("medications").select("id, circle_id, times").eq("active", true);
+  if (circleId) q = q.eq("circle_id", circleId);
+  const { data: meds } = await q;
 
   const rows = (meds ?? []).flatMap((m) =>
     (m.times as string[]).map((time) => ({
       medication_id: m.id,
-      circle_id: circleId,
+      circle_id: m.circle_id,
       scheduled_for: slot(date, time),
     }))
   );

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { t, type Key, type Lang } from "@/lib/i18n";
 import { useLang } from "@/lib/useLang";
 import LangSwitch from "@/app/LangSwitch";
+import NotificationBell from "./NotificationBell";
 
 export type Dose = {
   id: string;
@@ -87,16 +88,22 @@ export default function TodayView({ initialLang, role, memberName, elderName, do
     await post("/api/logout", {});
     window.location.href = "/";
   }
+  async function runNow() {
+    setError("");
+    const res = await post("/api/reminders/run", {}).catch(() => null);
+    if (!res?.ok) {
+      setError(t(lang, "oops"));
+      return;
+    }
+    router.refresh();
+    window.dispatchEvent(new Event("cc:notify"));
+  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-7 px-5 py-8">
       <header className="flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-lg text-muted">{t(lang, "hello")}, {memberName}</p>
-            <h1 className="text-4xl font-semibold">{t(lang, "today")}</h1>
-            <p className="text-xl text-muted">{elderName}</p>
-          </div>
+        <div className="flex items-center gap-1">
+          <NotificationBell lang={lang} />
           <button type="button" onClick={logout}
             className="rounded-xl px-4 py-2.5 text-lg font-medium text-brand underline-offset-4 hover:underline">
             {t(lang, "logout")}
@@ -108,6 +115,12 @@ export default function TodayView({ initialLang, role, memberName, elderName, do
       {doses.length === 0 ? (
         <section className="rounded-[28px] bg-white p-6 ring-1 ring-brand/15">
           <p className="text-2xl font-medium">{t(lang, "noDoses")}</p>
+          {role === "caretaker" && (
+            <button type="button" onClick={runNow}
+              className="rounded-2xl border-2 border-brand px-6 py-3.5 text-lg font-semibold text-brand">
+              {t(lang, "runNow")}
+            </button>
+          )}
           {role === "caretaker" && (
             <p className="mt-2 text-lg text-muted">{t(lang, "addFirst")}</p>
           )}
