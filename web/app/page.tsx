@@ -41,6 +41,7 @@ export default function Home() {
             elderName: f.get("elderName"),
             caretakerName: f.get("caretakerName"),
             elderPasscode: f.get("elderPasscode"),
+            email: String(f.get("email") ?? "") || undefined,
             caretakerPasscode: f.get("caretakerPasscode"),
             language: lang,
           };
@@ -147,6 +148,10 @@ export default function Home() {
                 <div>
                   <label htmlFor="caretakerName" className={labelCls}>{t(lang, "caretakerName")}</label>
                   <input id="caretakerName" name="caretakerName" required maxLength={60} className={field} />
+                </div>
+                                <div>
+                  <label htmlFor="email" className={labelCls}>{t(lang, "emailLabel")}</label>
+                  <input id="email" name="email" type="email" autoComplete="email" className={field} />
                 </div>
                 <div>
                   <label htmlFor="caretakerPasscode" className={labelCls}>{t(lang, "caretakerPasscode")}</label>

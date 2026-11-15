@@ -53,6 +53,8 @@ const en = {
   voiceOn: "Voice alerts are on",
   voiceOff: "Turn on voice alerts",
   runNow: "Run reminders now",
+  emailLabel: "Your email (for missed-dose alerts)",              // en
+         // mr
 } as const;
 
 export type Key = keyof typeof en;
@@ -105,7 +107,9 @@ const dict: Record<Lang, Record<Key, string>> = {
     noNotifs: "अभी कोई सूचना नहीं",
     voiceOn: "आवाज़ वाली सूचनाएँ चालू हैं",
     voiceOff: "आवाज़ वाली सूचनाएँ चालू करें",
-    runNow: "अभी रिमाइंडर चलाएँ",
+    runNow: "अभी रिमाइंडर चलाएँ",             // en
+    emailLabel: "आपका ईमेल (छूटी खुराक की सूचना के लिए)",            // hi
+    
   },
   mr: {
     tagline: "आपल्या माणसांची काळजी, एकत्र मिळून",
@@ -154,6 +158,7 @@ const dict: Record<Lang, Record<Key, string>> = {
     voiceOn: "आवाजी सूचना सुरू आहेत",
     voiceOff: "आवाजी सूचना सुरू करा",
     runNow: "आता स्मरणपत्रे चालवा",
+    emailLabel: "तुमचा ईमेल (चुकलेल्या मात्रेच्या सूचनेसाठी)",        // mr
   },
 };
 
